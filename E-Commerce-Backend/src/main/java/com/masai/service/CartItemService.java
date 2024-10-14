@@ -1,5 +1,6 @@
 package com.masai.service;
 
+import com.masai.models.Cart;
 import com.masai.models.CartDTO;
 import com.masai.models.CartItem;
 

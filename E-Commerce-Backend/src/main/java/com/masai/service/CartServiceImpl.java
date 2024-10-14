@@ -46,7 +46,6 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public Cart addProductToCart(CartDTO cartDto, String token) {
 
-		
 		if(token.contains("customer") == false) {
 			throw new LoginException("Invalid session token for customer");
 		}
@@ -67,7 +66,7 @@ public class CartServiceImpl implements CartService {
 		List<CartItem> cartItems = customerCart.getCartItems();
 		
 		CartItem item = cartItemService.createItemforCart(cartDto);
-		
+
 		double total=0.0;
 		if(cartItems.size() == 0) {
 			cartItems.add(item);
@@ -77,11 +76,7 @@ public class CartServiceImpl implements CartService {
 		else {
 			for(CartItem c: cartItems) {
 				total+=c.getCartItemQuantity()*c.getCartProduct().getPrice();
-				if(c.getCartProduct().getProductId() == cartDto.getProductId()) {
-					c.setCartItemQuantity(c.getCartItemQuantity() + 1);
-				}
 			}
-
 				cartItems.add(item);
 				customerCart.setCartTotal(total);
 
