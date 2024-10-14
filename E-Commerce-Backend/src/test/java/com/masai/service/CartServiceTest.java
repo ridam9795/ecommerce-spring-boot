@@ -65,17 +65,17 @@ public class CartServiceTest {
         cartId=353242;
         productId=523532;
 
-
+        cart=new Cart();
         userSession=UserSession.builder()
                 .userId(userId).sessionId(sessionId).token(token)
                 .sessionStartTime(LocalDateTime.MIN).sessionEndTime(LocalDateTime.MAX).build();
         customer=Customer.builder().customerId(1241424).firstName("varun")
                 .lastName("mishra").mobileNo("12345678765").emailId("varun@test.com")
                 .customerCart(cart).build();
-        cart=new Cart();
+
         cart.setCartId(cartId);
         cart.setCartTotal(0.0);
-        cart.setCustomer(customer);
+     //   cart.setCustomer(customer);
     }
 
     @Test
@@ -94,8 +94,8 @@ public class CartServiceTest {
         given(cartDao.save(any(Cart.class))).willReturn(cart);
         Cart expectedCart=cart;
         Cart actualCart=cartService.addProductToCart(cartDTO,token);
-     //   System.out.println(expectedCart);
-   //     System.out.println(actualCart);
+        System.out.println(expectedCart);
+        System.out.println(actualCart);
         Assertions.assertEquals(expectedCart,actualCart);
 
 
