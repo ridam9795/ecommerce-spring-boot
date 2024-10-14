@@ -67,6 +67,7 @@ public class CartServiceTest {
 
         cart=new Cart();
         cart.setCartId(cartId);
+        cart.setCartTotal(0.0);
         userSession=UserSession.builder()
                 .userId(userId).sessionId(sessionId).token(token)
                 .sessionStartTime(LocalDateTime.MIN).sessionEndTime(LocalDateTime.MAX).build();
@@ -80,18 +81,18 @@ public class CartServiceTest {
     public void addProductToCartTest_whenCartIsEmpty(){
 
         given(sessionDao.findByToken(token)).willReturn(Optional.ofNullable(userSession));
-        given(customerDao.findById(userId)).willReturn(Optional.ofNullable(customer));
+        given(customerDao.findById(userSession.getUserId())).willReturn(Optional.ofNullable(customer));
         Product product=Product.builder().productId(productId).productName("Dove").description("it's a shampoo")
                 .price(80.0).manufacturer("hrg").quantity(10).build();
         CartItem newCartItem=new CartItem(423213,product,2);
-        List<CartItem> cartItemList=new ArrayList<>();
+        List<CartItem> cartItemList=cart.getCartItems();
         cartItemList.add(newCartItem);
        CartDTO cartDTO=new CartDTO(newCartItem.getCartProduct().getProductId(),newCartItem.getCartProduct().getProductName(),newCartItem.getCartProduct().getPrice(),newCartItem.getCartItemQuantity());
         given(cartItemService.createItemforCart(cartDTO)).willReturn(newCartItem);
         given(cartDao.save(any(Cart.class))).willReturn(cart);
-        Cart expectedCart=new Cart(cartId,cartItemList,80.0,customer);
+        Cart expectedCart=cart;
         Cart actualCart=cartService.addProductToCart(cartDTO,token);
- //       System.out.println(expectedCart);
+     //   System.out.println(expectedCart);
    //     System.out.println(actualCart);
         Assertions.assertEquals(expectedCart,actualCart);
 
