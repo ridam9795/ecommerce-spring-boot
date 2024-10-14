@@ -49,14 +49,14 @@ public class CartServiceTest {
     @InjectMocks
     CartServiceImpl cartService;
 
-    private String token;
-    private int userId;
-    private int sessionId;
-    private int cartId;
-    private int productId;
-    private UserSession userSession;
-    private Customer customer;
-    private Cart cart;
+    public String token;
+    public int userId;
+    public int sessionId;
+    public int cartId;
+    public int productId;
+    public UserSession userSession;
+    public Customer customer;
+    public Cart cart;
     @BeforeEach
     public void setup(){
         token="customerToken";
@@ -65,15 +65,16 @@ public class CartServiceTest {
         cartId=353242;
         productId=523532;
 
-        cart=new Cart();
-        cart.setCartId(cartId);
-        cart.setCartTotal(0.0);
+
         userSession=UserSession.builder()
                 .userId(userId).sessionId(sessionId).token(token)
                 .sessionStartTime(LocalDateTime.MIN).sessionEndTime(LocalDateTime.MAX).build();
         customer=Customer.builder().customerId(1241424).firstName("varun")
                 .lastName("mishra").mobileNo("12345678765").emailId("varun@test.com")
                 .customerCart(cart).build();
+        cart=new Cart();
+        cart.setCartId(cartId);
+        cart.setCartTotal(0.0);
         cart.setCustomer(customer);
     }
 
@@ -88,7 +89,8 @@ public class CartServiceTest {
         List<CartItem> cartItemList=cart.getCartItems();
         cartItemList.add(newCartItem);
        CartDTO cartDTO=new CartDTO(newCartItem.getCartProduct().getProductId(),newCartItem.getCartProduct().getProductName(),newCartItem.getCartProduct().getPrice(),newCartItem.getCartItemQuantity());
-        given(cartItemService.createItemforCart(cartDTO)).willReturn(newCartItem);
+        System.out.println("Cart dto "+cartDTO);
+       given(cartItemService.createItemforCart(cartDTO)).willReturn(newCartItem);
         given(cartDao.save(any(Cart.class))).willReturn(cart);
         Cart expectedCart=cart;
         Cart actualCart=cartService.addProductToCart(cartDTO,token);
