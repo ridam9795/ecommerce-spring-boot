@@ -85,10 +85,8 @@ public class CartServiceTest {
         given(customerDao.findById(userSession.getUserId())).willReturn(Optional.ofNullable(customer));
         Product product=Product.builder().productId(productId).productName("Dove").description("it's a shampoo")
                 .price(80.0).manufacturer("hrg").quantity(10).build();
-        CartItem newCartItem=new CartItem(423213,product,2);
-        List<CartItem> cartItemList=cart.getCartItems();
-        cartItemList.add(newCartItem);
-       CartDTO cartDTO=new CartDTO(newCartItem.getCartProduct().getProductId(),newCartItem.getCartProduct().getProductName(),newCartItem.getCartProduct().getPrice(),newCartItem.getCartItemQuantity());
+       CartItem newCartItem=new CartItem(423213,product,3);
+      CartDTO cartDTO=new CartDTO();
         System.out.println("Cart dto "+cartDTO);
        given(cartItemService.createItemforCart(cartDTO)).willReturn(newCartItem);
         given(cartDao.save(any(Cart.class))).willReturn(cart);

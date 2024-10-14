@@ -68,24 +68,23 @@ public class CartServiceImpl implements CartService {
 		
 		CartItem item = cartItemService.createItemforCart(cartDto);
 		
-		
+		double total=0.0;
 		if(cartItems.size() == 0) {
 			cartItems.add(item);
-			customerCart.setCartTotal(item.getCartProduct().getPrice());
+			total=item.getCartProduct().getPrice()*item.getCartItemQuantity();
+			customerCart.setCartTotal(total);
 		}
 		else {
-			boolean flag = false;
 			for(CartItem c: cartItems) {
+				total+=c.getCartItemQuantity()*c.getCartProduct().getPrice();
 				if(c.getCartProduct().getProductId() == cartDto.getProductId()) {
 					c.setCartItemQuantity(c.getCartItemQuantity() + 1);
-					customerCart.setCartTotal(customerCart.getCartTotal() + c.getCartProduct().getPrice());
-					flag = true;
 				}
 			}
-			if(!flag) {
+
 				cartItems.add(item);
-				customerCart.setCartTotal(customerCart.getCartTotal() + item.getCartProduct().getPrice());
-			}
+				customerCart.setCartTotal(total);
+
 		}
 		
 		return cartDao.save(existingCustomer.getCustomerCart());
